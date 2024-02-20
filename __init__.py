@@ -7,4 +7,4 @@ The Django-CUBRID backend facilitates seamless integration and management of CUB
 databases within Django projects.
 """
 
-VERSION = "0.5.0"
+__version__ = "0.5.0"
