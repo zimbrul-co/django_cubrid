@@ -1,8 +1,8 @@
 """Setup script for the django_cubrid Python package."""
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
-with open('__init__.py', "r", encoding='utf-8') as f:
+with open('django_cubrid/__init__.py', "r", encoding='utf-8') as f:
     for line in f:
         if line.startswith('__version__'):
             version = line.split('=')[1].strip().strip("'").strip('"')
@@ -12,7 +12,7 @@ with open('README.md', "r", encoding='utf-8') as readme_file:
     readme = readme_file.read()
 
 setup(
-    name='django-cubrid',
+    name='django_cubrid',
     version=version,
     description='A Django database backend for CUBRID',
     long_description=readme,
@@ -20,17 +20,7 @@ setup(
     author='Casian Andrei',
     author_email='casian@zco.ro',
     url='https://github.com/zimbrul-co/django_cubrid',
-    py_modules=[
-        'base', 
-        'client', 
-        'compiler', 
-        'creation', 
-        'features', 
-        'introspection', 
-        'operations', 
-        'schema', 
-        'validation'
-    ],
+    packages=find_packages(),
     classifiers=[
         'Framework :: Django',
         'Programming Language :: Python :: 3',
