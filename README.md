@@ -1,4 +1,4 @@
-django_cubrid: Django backend for CUBRID Database
+django_cubrid
 ======================
 
 Overview
@@ -22,27 +22,37 @@ Features
 
 Prerequisites
 -------------
-* Python
-  Tested with Python >= 3.9
+* Python >= 3.9
+* Django >= 4.2
+* cubrid_db >= 0.7.1
 
-* Django
-  Tested with Django >= 2.1
+Build instructions
+------------------
 
-Build
------
-* When building the CUBRID Python driver, if the Python version meets the prerequisites,
-the django_cubrid will be installed into Python library.
+Build:
+
+```
+$ python setup.py build
+```
+
+Install:
+
+```
+$ sudo python setup.py install
+```
 
 
-Configure
----------
-Configure the DATABASES part in your setting.py like below:
+Django configuration
+--------------------
+
+Configure the DATABASES part in your Django settings.py module:
+
 ```
     DATABASES = {
         'default': {
             'ENGINE': 'django_cubrid',       # The backend name: django_cubrid
-            'NAME': 'demodb',                # CUBRID Database name: ie, demodb
-            'USER': 'public',                # User to access CUBRID: ie, public
+            'NAME': 'demodb',                # CUBRID Database name
+            'USER': 'public',                # User to access CUBRID
             'PASSWORD': '',                  # Password to access CUBRID.
             'HOST': '',                      # Set to empty string for localhost.
             'PORT': '33000',                 # Set to empty string for default.
@@ -51,7 +61,7 @@ Configure the DATABASES part in your setting.py like below:
 ```
 
 For more information on using and configuring this backend, refer to the Django
-documentation and the CUBRID database documentation.
+documentation.
 
 Note:
 - This backend is community-driven and is not officially part of the Django project.
@@ -60,11 +70,52 @@ Note:
 Known issues
 ------------
 
-* The Django sqlflush maybe failed because of the foreign constraints between database
-tables.
+* ForeignKey to_field feature does not work because CUBRID limitations:
+CUBRID does not allow foreign key to reference non-primary key;
+* Does not support microsecond precision, CUBRID has millisecond precision;
+* Positive number constraints are not implemented by CUBRID;
+* SQL order by ... exists is not supported by CUBRID;
+* No math power operators are present in CUBRID SQL;
+* Django loaddata command can fail in some cases with recursive relations, because
+CUBRID does not support disabling constraint checks;
+* CUBRID does not allow duplicate indexes;
+* CUBRID does not allow auto increment on char field;
+* CUBRID does not support removing the primary key;
+* CUBRID does not implement SHA224, SHA256, SHA384, SHA512;
+* CUBRID does not implement ISO year extraction;
+* FTimeDelta does not work - many tests are failing, not yet fixed;
+* Some other various Django tests are failing.
 
-* After using the Django loaddata command, the insert SQL manipulation in the application
-maybe failed, becuse of the auto field.
+Testing
+-------
+
+Start CUBRID service:
+
+```
+$ cubrid service start
+```
+
+Clone Django patched and adapted for django_cubrid testing:
+
+```
+$ git clone git@github.com:zimbrul-co/django.git
+$ git checkout cubrid-4.2
+```
+
+Create a new virtual environment for the tests:
+
+```
+$ python -m venv venv
+$ source venv/bin/activate
+(venv) $ pip install -r tests/requirements/cubrid.txt
+```
+
+Test:
+
+```
+(venv) $ cd tests
+(venv) $ python ./runtests.py --settings test_cubrid
+```
 
 License
 -------
@@ -72,4 +123,4 @@ License
 CUBRID is distributed under two licenses, Database engine is under GPL v2 or
 later and the APIs are under BSD license.
 
-The django_cubrid is under BSD license.
+The django_cubrid is under BSD license. See LICENSE file.
