@@ -29,7 +29,7 @@ setup(
     ],
     install_requires=[
         'Django>=4.2',
-        'cubrid_db @ git+https://github.com/zimbrul-co/cubrid_db.git@master#egg=cubrid_db',
+        'cubrid_db>=0.7.1',
     ],
     python_requires='>=3.9',
     license='BSD-3-Clause',
