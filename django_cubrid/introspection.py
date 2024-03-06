@@ -117,7 +117,7 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
 
     def get_table_list(self, cursor):
         """Returns a list of tables in the current database."""
-        cursor.execute("SELECT class_name, class_type, comment FROM _db_class "
+        cursor.execute("SELECT class_name, class_type, comment FROM db_class "
             "WHERE is_system_class != 1")
         return [TableInfo(r[0], {0: 't', 1: 'v'}.get(r[1]), r[2])
                 for r in cursor.fetchall()]
@@ -164,7 +164,7 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
         Return a dictionary of {field_name: (field_name_other_table, other_table)}
         representing all foreign keys in the given table.
         """
-        cursor.execute("SELECT index_name FROM _db_index "
+        cursor.execute("SELECT index_name FROM db_index "
             "WHERE class_of.class_name = ? AND is_foreign_key = 1",
             [table_name]
         )
