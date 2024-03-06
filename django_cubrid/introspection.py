@@ -122,6 +122,11 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
         return [TableInfo(r[0], {0: 't', 1: 'v'}.get(r[1]), r[2])
                 for r in cursor.fetchall()]
 
+    def table_names(self, cursor):
+        cursor.execute("SELECT class_name FROM db_class "
+            "WHERE is_system_class != 1")
+        return [r[0] for r in cursor.fetchall()]
+
     def identifier_converter(self, name):
         """Identifiers are case insensitive under CUBRID"""
         return name.lower()
