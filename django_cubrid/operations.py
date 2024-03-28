@@ -216,6 +216,7 @@ class DatabaseOperations(BaseDatabaseOperations):
 
         assert not isinstance(params, dict)
 
+        sql = sql.replace('?', '%s')
         u_params = tuple(force_str(val, strings_only=True, errors="replace") for val in params)
         return sql % u_params
 
